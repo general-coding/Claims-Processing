@@ -15,6 +15,8 @@ public partial class claims_processingContext : DbContext
     {
     }
 
+    public virtual DbSet<tbl_claim> tbl_claim { get; set; }
+
     public virtual DbSet<tbl_user> tbl_user { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -23,9 +25,27 @@ public partial class claims_processingContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<tbl_claim>(entity =>
+        {
+            entity.HasKey(e => e.claim_id);
+
+            entity.Property(e => e.claim_amount).HasColumnType("numeric(18, 0)");
+            entity.Property(e => e.claim_status).HasMaxLength(10);
+            entity.Property(e => e.claim_type).HasMaxLength(10);
+            entity.Property(e => e.created_on)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+            entity.Property(e => e.modified_on).HasMaxLength(10);
+
+            entity.HasOne(d => d.claim_user).WithMany(p => p.tbl_claim)
+                .HasForeignKey(d => d.claim_user_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tbl_claim_tbl_user_claim_user_id_user_id");
+        });
+
         modelBuilder.Entity<tbl_user>(entity =>
         {
-            entity.HasKey(e => e.user_id).HasName("PK_tbl_users");
+            entity.HasKey(e => e.user_id);
 
             entity.Property(e => e.created_on)
                 .HasDefaultValueSql("(getdate())")

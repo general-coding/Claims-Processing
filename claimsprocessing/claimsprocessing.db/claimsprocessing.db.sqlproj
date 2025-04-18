@@ -132,5 +132,9 @@
     </Build>
     <Build Include="Security\Permissions.sql" />
     <Build Include="Functions\Scalar-valued Functions\get_user_fullname.sql" />
+    <Build Include="dbo\Tables\tbl_claim.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="claimsprocessing.db.refactorlog" />
   </ItemGroup>
 </Project>
