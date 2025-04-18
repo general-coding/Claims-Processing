@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using claimsprocessing.api.Models;
+using claimsprocessing.api.Services;
 
 namespace claimsprocessing.api.Controllers
 {
@@ -13,60 +14,50 @@ namespace claimsprocessing.api.Controllers
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly claims_processingContext _context;
+        private readonly IUserService _userService;
 
-        public UserController(claims_processingContext context)
+        public UserController(IUserService userService)
         {
-            _context = context;
+            _userService = userService;
         }
 
         // GET: api/Users
         [HttpGet()]
         public async Task<ActionResult<IEnumerable<tbl_user>>> GetUsers()
         {
-            return await _context.tbl_user.ToListAsync();
+            IEnumerable<tbl_user> users = await _userService.GetUsersAsync();
+            return Ok(users);
         }
 
         // GET: api/User/5
         [HttpGet("{id}")]
         public async Task<ActionResult<tbl_user>> GetUserById(int id)
         {
-            var tbl_user = await _context.tbl_user.FindAsync(id);
+            tbl_user tbl_user = await _userService.GetUserByIdAsync(id);
 
             if (tbl_user == null)
             {
                 return NotFound();
             }
 
-            return tbl_user;
+            return Ok(tbl_user);
         }
 
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserById(int id, tbl_user tbl_user)
+        public async Task<IActionResult> UpdateUserById(int id, tbl_user user)
         {
-            if (id != tbl_user.user_id)
+            if (id != user.user_id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(tbl_user).State = EntityState.Modified;
+            bool isUpdated = await _userService.UpdateUserByIdAsync(id, user);
 
-            try
+            if (!isUpdated)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!tbl_userExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
@@ -75,33 +66,24 @@ namespace claimsprocessing.api.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<tbl_user>> CreateUser(tbl_user tbl_user)
+        public async Task<ActionResult<tbl_user>> CreateUser(tbl_user? user)
         {
-            _context.tbl_user.Add(tbl_user);
-            await _context.SaveChangesAsync();
+            if (user == null)
+            {
+                return BadRequest();
+            }
 
-            return CreatedAtAction("GetUserById", new { id = tbl_user.user_id }, tbl_user);
+            user = await _userService.CreateUserAsync(user);
+            return CreatedAtAction("GetUserById", new { id = user?.user_id }, user);
         }
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserById(int id)
         {
-            var tbl_user = await _context.tbl_user.FindAsync(id);
-            if (tbl_user == null)
-            {
-                return NotFound();
-            }
+            bool isDeleted = await _userService.DeleteUserByIdAsync(id);
 
-            _context.tbl_user.Remove(tbl_user);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        private bool tbl_userExists(int id)
-        {
-            return _context.tbl_user.Any(e => e.user_id == id);
+            return isDeleted ? NoContent() : NotFound();
         }
     }
 }

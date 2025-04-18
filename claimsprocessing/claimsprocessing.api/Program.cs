@@ -1,5 +1,6 @@
 
 using claimsprocessing.api.Models;
+using claimsprocessing.api.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace claimsprocessing.api
@@ -11,10 +12,12 @@ namespace claimsprocessing.api
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-
+            
             // Add the DB Context
             builder.Services.AddDbContext<claims_processingContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
+
+            builder.Services.AddScoped<IUserService, UserService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
