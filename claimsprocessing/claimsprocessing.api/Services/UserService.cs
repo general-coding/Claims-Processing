@@ -28,6 +28,7 @@ namespace claimsprocessing.api.Services
         public async Task<tbl_user?> CreateUserAsync(tbl_user user)
         {
             user.user_fullname = Utilities.GetUserFullName(user);
+            user.user_password = Utilities.GeneratePasswordHash(user.user_password!);
 
             _context.tbl_user.Add(user);
 
