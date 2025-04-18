@@ -25,7 +25,7 @@ public partial class claims_processingContext : DbContext
     {
         modelBuilder.Entity<tbl_user>(entity =>
         {
-            entity.HasKey(e => e.user_id);
+            entity.HasKey(e => e.user_id).HasName("PK_tbl_users");
 
             entity.Property(e => e.created_on)
                 .HasDefaultValueSql("(getdate())")
@@ -33,6 +33,9 @@ public partial class claims_processingContext : DbContext
             entity.Property(e => e.modified_on).HasColumnType("datetime");
             entity.Property(e => e.user_email).HasMaxLength(255);
             entity.Property(e => e.user_fname).HasMaxLength(50);
+            entity.Property(e => e.user_fullname)
+                .HasMaxLength(150)
+                .HasComputedColumnSql("([dbo].[get_user_fullname]([user_id]))", false);
             entity.Property(e => e.user_lname).HasMaxLength(50);
             entity.Property(e => e.user_mname).HasMaxLength(50);
             entity.Property(e => e.user_password).HasMaxLength(255);

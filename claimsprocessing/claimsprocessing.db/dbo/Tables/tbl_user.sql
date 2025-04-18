@@ -3,6 +3,7 @@
     [user_fname]    NVARCHAR (50)  NOT NULL,
     [user_mname]    NVARCHAR (50)  NULL,
     [user_lname]    NVARCHAR (50)  NOT NULL,
+    [user_fullname] AS [dbo].[get_user_fullname]([user_id]),
     [user_email]    NVARCHAR (255) NOT NULL,
     [user_password] NVARCHAR (255) NOT NULL,
     [created_on]    DATETIME       CONSTRAINT [DF_tbl_users_created_on] DEFAULT (getdate()) NOT NULL,

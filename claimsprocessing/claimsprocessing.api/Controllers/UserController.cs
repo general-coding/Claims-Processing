@@ -33,7 +33,7 @@ namespace claimsprocessing.api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<tbl_user>> GetUserById(int id)
         {
-            tbl_user tbl_user = await _userService.GetUserByIdAsync(id);
+            tbl_user? tbl_user = await _userService.GetUserByIdAsync(id);
 
             if (tbl_user == null)
             {
