@@ -1,4 +1,5 @@
 ﻿using claimsprocessing.api.Models;
+using claimsprocessing.api.Utitlities;
 using Microsoft.EntityFrameworkCore;
 
 namespace claimsprocessing.api.Services
@@ -26,6 +27,8 @@ namespace claimsprocessing.api.Services
 
         public async Task<tbl_user?> CreateUserAsync(tbl_user user)
         {
+            user.user_fullname = Utilities.GetUserFullName(user);
+
             _context.tbl_user.Add(user);
 
             try
