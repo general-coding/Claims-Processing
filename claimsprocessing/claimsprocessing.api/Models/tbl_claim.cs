@@ -1,4 +1,7 @@
-﻿namespace claimsprocessing.api.Models;
+﻿using System;
+using System.Collections.Generic;
+
+namespace claimsprocessing.api.Models;
 
 public partial class tbl_claim
 {
@@ -17,4 +20,6 @@ public partial class tbl_claim
     public DateTime? modified_on { get; set; }
 
     public virtual tbl_user claim_user { get; set; } = null!;
+
+    public virtual ICollection<tbl_claim_status_update> tbl_claim_status_update { get; set; } = new List<tbl_claim_status_update>();
 }

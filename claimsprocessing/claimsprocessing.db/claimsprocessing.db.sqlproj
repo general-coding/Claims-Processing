@@ -124,6 +124,7 @@
     <Folder Include="Security\" />
     <Folder Include="Functions" />
     <Folder Include="Functions\Scalar-valued Functions" />
+    <Folder Include="Triggers" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\tbl_user.sql">
@@ -133,6 +134,9 @@
     <Build Include="Security\Permissions.sql" />
     <Build Include="Functions\Scalar-valued Functions\get_user_fullname.sql" />
     <Build Include="dbo\Tables\tbl_claim.sql" />
+    <Build Include="dbo\Tables\tbl_claim_status_update.sql" />
+    <Build Include="Triggers\trg_tbl_claim_insert.sql" />
+    <Build Include="Triggers\trg_tbl_claim_update.sql" />
   </ItemGroup>
   <ItemGroup>
     <RefactorLog Include="claimsprocessing.db.refactorlog" />

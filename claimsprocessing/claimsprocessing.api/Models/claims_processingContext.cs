@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 
 namespace claimsprocessing.api.Models;
 
@@ -15,6 +17,8 @@ public partial class claims_processingContext : DbContext
 
     public virtual DbSet<tbl_claim> tbl_claim { get; set; }
 
+    public virtual DbSet<tbl_claim_status_update> tbl_claim_status_update { get; set; }
+
     public virtual DbSet<tbl_user> tbl_user { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -26,6 +30,12 @@ public partial class claims_processingContext : DbContext
         modelBuilder.Entity<tbl_claim>(entity =>
         {
             entity.HasKey(e => e.claim_id);
+
+            entity.ToTable(tb =>
+                {
+                    tb.HasTrigger("trg_tbl_claim_insert");
+                    tb.HasTrigger("trg_tbl_claim_update");
+                });
 
             entity.Property(e => e.claim_amount).HasColumnType("numeric(18, 0)");
             entity.Property(e => e.claim_status).HasMaxLength(10);
@@ -39,6 +49,21 @@ public partial class claims_processingContext : DbContext
                 .HasForeignKey(d => d.claim_user_id)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tbl_claim_tbl_user_claim_user_id_user_id");
+        });
+
+        modelBuilder.Entity<tbl_claim_status_update>(entity =>
+        {
+            entity.HasKey(e => e.claim_status_update_id);
+
+            entity.Property(e => e.claim_status).HasMaxLength(10);
+            entity.Property(e => e.created_on)
+                .HasDefaultValueSql("(getdate())")
+                .HasColumnType("datetime");
+
+            entity.HasOne(d => d.claim).WithMany(p => p.tbl_claim_status_update)
+                .HasForeignKey(d => d.claim_id)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_tbl_claim_status_update_tbl_claim_claim_id_claim_id");
         });
 
         modelBuilder.Entity<tbl_user>(entity =>
