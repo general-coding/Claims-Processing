@@ -46,8 +46,6 @@ namespace claimsprocessing.api.Services
 
         public async Task<bool> UpdateUserByIdAsync(int id, tbl_user user)
         {
-            user.modified_on = DateTime.Now;
-
             _context.Entry(user).State = EntityState.Modified;
 
             try

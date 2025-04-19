@@ -33,11 +33,6 @@ namespace claimsprocessing.api.Services
         {            
             try
             {
-                if (!await CheckParentExistsAsync(claim.claim_user_id))
-                {
-                    return null;
-                }
-
                 //Detach parent. Prevent EF Core from trying to insert a new user.
                 claim.claim_user = null;
 
@@ -55,8 +50,6 @@ namespace claimsprocessing.api.Services
 
         public async Task<bool> UpdateClaimByIdAsync(int id, tbl_claim claim)
         {
-            claim.modified_on = DateTime.Now;
-
             _context.Entry(claim).State = EntityState.Modified;
 
             try

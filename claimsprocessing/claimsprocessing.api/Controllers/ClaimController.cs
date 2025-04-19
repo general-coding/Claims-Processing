@@ -1,4 +1,6 @@
-﻿using claimsprocessing.api.Models;
+﻿using AutoMapper;
+using claimsprocessing.api.DTO;
+using claimsprocessing.api.Models;
 using claimsprocessing.api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace claimsprocessing.api.Controllers
     public class ClaimController : ControllerBase
     {
         private readonly IClaimService _claimService;
+        private readonly IMapper _mapper;
 
-        public ClaimController(IClaimService claimService)
+        public ClaimController(IClaimService claimService, IMapper mapper)
         {
             _claimService = claimService;
+            _mapper = mapper;
         }
 
         // GET: api/Claims
@@ -40,12 +44,14 @@ namespace claimsprocessing.api.Controllers
         // PUT: api/Claim/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateClaimById(int id, tbl_claim claim)
+        public async Task<IActionResult> UpdateClaimById(int id, ClaimUpdateDTO claimUpdateDTO)
         {
-            if (id != claim.claim_id)
+            if (id != claimUpdateDTO.claim_id)
             {
                 return BadRequest();
             }
+
+            tbl_claim? claim = _mapper.Map<tbl_claim>(claimUpdateDTO);
 
             bool isUpdated = await _claimService.UpdateClaimByIdAsync(id, claim);
 
@@ -60,12 +66,18 @@ namespace claimsprocessing.api.Controllers
         // POST: api/Claim
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<tbl_user>> CreateClaim(tbl_claim? claim)
+        public async Task<ActionResult<tbl_user>> CreateClaim(ClaimCreateDTO claimCreateDTO)
         {
-            if (claim == null)
+            if (claimCreateDTO == null)
             {
                 return BadRequest();
             }
+            if (!await _claimService.CheckParentExistsAsync(claimCreateDTO.claim_user_id))
+            {
+                return BadRequest("User does not exist.");
+            }
+
+            tbl_claim? claim = _mapper.Map<tbl_claim>(claimCreateDTO);
 
             claim = await _claimService.CreateClaimAsync(claim);
             return CreatedAtAction("GetClaimById", new { id = claim?.claim_id }, claim);

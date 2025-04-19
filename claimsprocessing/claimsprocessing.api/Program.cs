@@ -17,6 +17,8 @@ namespace claimsprocessing.api
             builder.Services.AddDbContext<claims_processingContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnectionString")));
 
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IClaimService, ClaimService>();
 

@@ -1,4 +1,6 @@
-﻿using claimsprocessing.api.Models;
+﻿using AutoMapper;
+using claimsprocessing.api.DTO;
+using claimsprocessing.api.Models;
 using claimsprocessing.api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +11,12 @@ namespace claimsprocessing.api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IMapper mapper)
         {
             _userService = userService;
+            _mapper = mapper;
         }
 
         // GET: api/Users
@@ -40,12 +44,14 @@ namespace claimsprocessing.api.Controllers
         // PUT: api/User/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUserById(int id, tbl_user user)
+        public async Task<IActionResult> UpdateUserById(int id, UserUpdateDTO userUpdateDTO)
         {
-            if (id != user.user_id)
+            if (id != userUpdateDTO.user_id)
             {
                 return BadRequest();
             }
+
+            tbl_user? user = _mapper.Map<tbl_user>(userUpdateDTO);
 
             bool isUpdated = await _userService.UpdateUserByIdAsync(id, user);
 
@@ -60,12 +66,14 @@ namespace claimsprocessing.api.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<tbl_user>> CreateUser(tbl_user? user)
+        public async Task<ActionResult<tbl_user>> CreateUser(UserCreateDTO userCreateDTO)
         {
-            if (user == null)
+            if (userCreateDTO == null)
             {
                 return BadRequest();
             }
+
+            tbl_user? user = _mapper.Map<tbl_user>(userCreateDTO);
 
             user = await _userService.CreateUserAsync(user);
             return CreatedAtAction("GetUserById", new { id = user?.user_id }, user);
