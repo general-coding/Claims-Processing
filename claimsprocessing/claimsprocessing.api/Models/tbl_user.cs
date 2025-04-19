@@ -24,4 +24,6 @@ public partial class tbl_user
     public DateTime? modified_on { get; set; }
 
     public virtual ICollection<tbl_claim> tbl_claim { get; set; } = new List<tbl_claim>();
+
+    public virtual ICollection<tbl_claim_status_update> tbl_claim_status_update { get; set; } = new List<tbl_claim_status_update>();
 }
