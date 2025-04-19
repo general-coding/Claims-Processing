@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace claimsprocessing.api.Models;
+﻿namespace claimsprocessing.api.Models;
 
 public partial class tbl_user
 {

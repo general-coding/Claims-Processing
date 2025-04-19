@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace claimsprocessing.api.Models;
+﻿namespace claimsprocessing.api.Models;
 
 public partial class tbl_claim
 {
@@ -17,7 +14,7 @@ public partial class tbl_claim
 
     public DateTime created_on { get; set; }
 
-    public string? modified_on { get; set; }
+    public DateTime? modified_on { get; set; }
 
     public virtual tbl_user claim_user { get; set; } = null!;
 }

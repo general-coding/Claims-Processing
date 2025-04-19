@@ -6,7 +6,7 @@
     [user_fullname] NVARCHAR (150) NULL,
     [user_email]    NVARCHAR (255) NOT NULL,
     [user_password] NVARCHAR (255) NOT NULL,
-    [created_on]    DATETIME       CONSTRAINT [DF_tbl_users_created_on] DEFAULT (getdate()) NOT NULL,
+    [created_on]    DATETIME       CONSTRAINT [DF_tbl_user_created_on] DEFAULT (getdate()) NOT NULL,
     [modified_on]   DATETIME       NULL,
     CONSTRAINT [PK_tbl_user] PRIMARY KEY CLUSTERED ([user_id] ASC)
 );

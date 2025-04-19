@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace claimsprocessing.api.Models;
 
@@ -35,7 +33,7 @@ public partial class claims_processingContext : DbContext
             entity.Property(e => e.created_on)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.modified_on).HasMaxLength(10);
+            entity.Property(e => e.modified_on).HasColumnType("datetime");
 
             entity.HasOne(d => d.claim_user).WithMany(p => p.tbl_claim)
                 .HasForeignKey(d => d.claim_user_id)
