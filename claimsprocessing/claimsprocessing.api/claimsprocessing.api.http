@@ -1,0 +1,6 @@
+@claimsprocessing.api_HostAddress = http://localhost:5102
+
+GET {{claimsprocessing.api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

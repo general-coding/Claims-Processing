@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/claimsprocessing/.vs/claimsprocessing
+/claimsprocessing/claimsprocessing.api/bin/
+/claimsprocessing/claimsprocessing.api/obj
+/claimsprocessing/claimsprocessing.api.tests/bin
+/claimsprocessing/claimsprocessing.api.tests/obj
+/claimsprocessing/claimsprocessing.db/bin
+/claimsprocessing/claimsprocessing.db/obj
+/claimsprocessing/claimsprocessing.frontend/.vscode
