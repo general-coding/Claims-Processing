@@ -2,11 +2,9 @@
 
 namespace claimsprocessing.api.Controllers
 {
-    public class ClaimStatusUpdateController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ClaimStatusUpdateController : ControllerBase
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

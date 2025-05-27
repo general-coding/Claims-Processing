@@ -7,7 +7,7 @@ namespace claimsprocessing.api.Models
         // Ensure this is the only implementation of the partial method
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<tbl_user>(entity => entity.Property(e => e.user_fullname).ValueGeneratedOnAddOrUpdate());
+            //modelBuilder.Entity<tbl_user>(entity => entity.Property(e => e.user_fullname).ValueGeneratedOnAddOrUpdate());
         }
     }
 }

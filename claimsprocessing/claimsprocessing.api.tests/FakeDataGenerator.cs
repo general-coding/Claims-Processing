@@ -14,7 +14,7 @@ namespace claimsprocessing.api.tests
                 .RuleFor(u => u.user_lname, f => f.Name.LastName())
                 .RuleFor(u => u.user_fullname, setter: (f, u) => UserUtilities.GetUserFullName(u))
                 .RuleFor(u => u.user_email, f => f.Internet.Email())
-                .RuleFor(u => u.user_password, f => f.Internet.Password())
+                .RuleFor(u => u.user_password, setter: (f, u) => UserUtilities.GeneratePasswordHash("password"))
                 .RuleFor(u => u.created_on, DateTime.Now);
 
             return faker.Generate(count);

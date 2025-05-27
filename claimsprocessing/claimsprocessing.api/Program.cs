@@ -34,6 +34,7 @@ namespace claimsprocessing.api
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IClaimService, ClaimService>();
             builder.Services.AddScoped<IClaimStatusUpdateService, ClaimStatusUpdateService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
