@@ -19,6 +19,5 @@ export const UserColumns = [
   { name: 'user_email', label: 'Email', type: 'string' },
   { name: 'user_password', label: 'Password', type: 'string' },
   { name: 'created_on', label: 'Created On', type: 'date' },
-  { name: 'modified_on', label: 'Modified On', type: 'date' },
-  { name: 'isEdit', label: 'Edit', type: 'boolean' },
+  { name: 'modified_on', label: 'Modified On', type: 'date' }
 ];

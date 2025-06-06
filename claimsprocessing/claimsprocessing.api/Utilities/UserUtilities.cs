@@ -1,6 +1,4 @@
 ﻿using claimsprocessing.api.Models;
-using Microsoft.AspNetCore.Cryptography.KeyDerivation;
-using System.Security.Cryptography;
 
 namespace claimsprocessing.api.Utilities
 {
@@ -20,17 +18,7 @@ namespace claimsprocessing.api.Utilities
 
         public static string GeneratePasswordHash(string password)
         {
-            // Generate a 128-bit salt using a sequence of
-            // cryptographically strong random bytes.
-            // divide by 8 to convert bits to bytes
-            byte[] salt = RandomNumberGenerator.GetBytes(128 / 8);
-
-            // derive a 256-bit subkey (use HMACSHA256 with 100,000 iterations)
-            string hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(password: password!,
-                                                                      salt: salt,
-                                                                      prf: KeyDerivationPrf.HMACSHA256,
-                                                                      iterationCount: 100000,
-                                                                      numBytesRequested: 256 / 8));
+            string hash = BCrypt.Net.BCrypt.HashPassword(password);
 
             return hash;
         }

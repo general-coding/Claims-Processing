@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
+import { AfterViewInit, Component, ViewChild } from '@angular/core';
 import { User, UserColumns } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
+import { RouterModule } from '@angular/router';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-user',
@@ -15,22 +16,42 @@ import { MatDividerModule } from '@angular/material/divider';
     MatTableModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule,
+    MatPaginatorModule,
+    RouterModule,
   ],
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css'],
 })
-export class UserComponent {
+export class UserComponent implements AfterViewInit{
   userList: User[] = [];
 
-  // MatTable related properties
+  // MatTable related data
   dataSource = new MatTableDataSource<User>([]);
-  displayedColumns: string[] = UserColumns.map((col) => col.name).concat('actions');
+
+  // Do display all name fields and password
+  doNotDisplayColumns: string[] = [
+    'user_fname',
+    'user_mname',
+    'user_lname',
+    'user_password',
+  ];
+  // displayedColumns: string[] = UserColumns.map((col) => col.name)
+  //   .filter((name) => name !== 'user_password')
+  //   .concat('actions');
+  displayedColumns: string[] = UserColumns.map((col) => col.name)
+    .filter((name) => !this.doNotDisplayColumns.includes(name))
+    .concat('actions');
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private userService: UserService) {}
 
   ngOnInit(): void {
     this.getUsers();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
   }
 
   getUsers() {
@@ -40,6 +61,7 @@ export class UserComponent {
         this.dataSource.data = this.userList;
       },
       error: (error) => {
+        this.dataSource = new MatTableDataSource<User>([]);
         console.error('Error fetching users:', error);
       },
       complete: () => {
@@ -56,8 +78,7 @@ export class UserComponent {
       user_lname: 'c',
       user_fullname: 'a b c',
       user_email: 'def@ghi.jkl',
-      user_password:
-        '6badc0765cffa15ed4ce7436f990f13d8ff81a8f60114b3297c2305a54dd15a8',
+      user_password: 'password',
       created_on: new Date(Date.now()),
     };
 
@@ -89,7 +110,7 @@ export class UserComponent {
       },
       complete: () => {
         console.log('User deletion completed');
-      }
+      },
     });
   }
 

@@ -1,0 +1,114 @@
+<div class="login-page bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-3"></div>
+      <div class="col-6">
+        <div class="bg-white shadow rounded">
+          <div class="row">
+            <div class="col-12 px-5 py-5">
+              <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label"
+                    >Email<span class="text-danger">*</span></label
+                  >
+                  <div class="col-10">
+                    <input
+                      class="form-control"
+                      formControlName="user_email"
+                      type="email"
+                    />
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        loginForm.get('user_email')?.invalid &&
+                        loginForm.get('user_email')?.touched
+                      "
+                    >
+                      Valid email is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <label class="col-2 col-form-label"
+                    >Password<span class="text-danger">*</span></label
+                  >
+                  <div class="col-10">
+                    <input
+                      class="form-control"
+                      formControlName="user_password"
+                      type="password"
+                    />
+                    <div
+                      class="text-danger"
+                      *ngIf="
+                        loginForm.get('user_password')?.invalid &&
+                        loginForm.get('user_password')?.touched
+                      "
+                    >
+                      Password is required.
+                    </div>
+                  </div>
+                </div>
+
+                <div class="row mb-3">
+                  <div class="col-12">
+                    <button type="submit" class="btn btn-primary btn float-end">
+                      Login
+                    </button>
+                  </div>
+                </div>
+
+                <div *ngIf="errorMessage">
+                  <div class="row mb-3">
+                    <div class="col-12 text-danger">
+                      {{ errorMessage }}
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3"></div>
+    </div>
+  </div>
+</div>
+
+<form class="form-group" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <label>Email:</label>
+  <input class="form-control" formControlName="user_email" type="email" />
+  <div
+    *ngIf="
+      loginForm.get('user_email')?.invalid &&
+      loginForm.get('user_email')?.touched
+    "
+  >
+    Valid email is required.
+  </div>
+
+  <label>Password:</label>
+  <input class="form-control" formControlName="user_password" type="password" />
+  <div
+    *ngIf="
+      loginForm.get('user_password')?.invalid &&
+      loginForm.get('user_password')?.touched
+    "
+  >
+    Password is required.
+  </div>
+
+  <button class="btn btn-primary" type="submit" [disabled]="loginForm.invalid">
+    Login
+  </button>
+
+  <hr />
+
+  <button type="button" class="btn btn-link">Signup</button>
+  <button type="button" class="btn btn-link">Reset Password</button>
+
+  <div *ngIf="errorMessage" style="color: red; margin-top: 10px">
+    {{ errorMessage }}
+  </div>
+</form>
